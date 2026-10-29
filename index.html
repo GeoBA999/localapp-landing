@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LocalApp | Web app de agendamiento con tu marca</title>
+<meta name="description" content="Una web app donde tus clientes agendan solos, con tu logo, tus colores y tus fotos. Lista en 72 horas. Sin comisión por cita.">
+<meta name="theme-color" content="#0D0B26">
+<meta property="og:title" content="LocalApp | Tu negocio, tu agenda, tu marca">
+<meta property="og:description" content="Una web app donde tus clientes agendan solos, con tu logo, tus colores y tus fotos. Lista en 72 horas.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CO">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0D0B26;      /* fondo oscuro */
+  --night-2:#16133A;
+  --ink:#17133F;
+  --ink-soft:#4E4B74;
+  --paper:#F3F3FB;
+  --white:#FFFFFF;
+  --line:#DEDDF0;
+  --wa:#25D366;         /* solo para el CTA primario */
+  --wa-dark:#128C4A;
+  --violet:#6C5CFF;
+  --cyan:#3EE0CF;
+  --sun:#FFC940;
+  --on-night:#C8C5EC;
+  --glass:rgba(255,255,255,.06);
+  --glass-line:rgba(255,255,255,.14);
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Figtree",system-ui,sans-serif;
+  --wrap:1140px;
+  --r-md:18px; --r-lg:28px;
+  --lift:0 1px 2px rgba(23,19,63,.06),0 18px 40px -18px rgba(23,19,63,.28);
+  --spectrum:linear-gradient(120deg,var(--violet),var(--cyan));
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--body);font-size:1.0625rem;line-height:1.5;color:var(--ink);background:var(--paper);padding-bottom:76px}
+svg{display:block}
+a{color:inherit}
+h1,h2,h3,p,ul,ol,dl,dd{margin:0}
+ul,ol{padding:0;list-style:none}
+h1,h2,h3{font-family:var(--display);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
+h1{font-size:clamp(2.75rem,11vw,5.25rem);font-weight:800}
+h2{font-size:clamp(1.85rem,6.2vw,3rem);font-weight:700}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em}
+p{text-wrap:pretty}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px;border-radius:6px}
+section[id]{scroll-margin-top:76px}
+.wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:20px}
+.band{padding-block:68px;position:relative}
+.band--white{background:var(--white)}
+.band--night{background:var(--night);color:var(--white)}
+.band--flush{padding-top:0}
+.lead{font-size:1.15rem;color:var(--ink-soft);margin-top:14px;max-width:34em}
+.band--night .lead{color:var(--on-night)}
+.micro{font-size:.92rem;color:var(--ink-soft)}
+.band--night .micro{color:var(--on-night)}
+.ico{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.grad{background:var(--spectrum);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:14px 24px;border-radius:999px;font:700 1.05rem/1.1 var(--body);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background-color .15s ease,box-shadow .15s ease}
+.btn:active{transform:scale(.97)}
+.btn--wa{background:var(--wa);color:#06250F;box-shadow:0 0 0 1px rgba(255,255,255,.25) inset,0 12px 30px -8px rgba(37,211,102,.6)}
+.btn--wa:hover{background:#45E581;box-shadow:0 0 0 1px rgba(255,255,255,.3) inset,0 16px 36px -8px rgba(37,211,102,.8)}
+.btn--wa .ico{fill:currentColor;stroke:none}
+.btn--ghost{border-color:var(--ink);color:var(--ink)}
+.btn--ghost:hover{background:var(--ink);color:var(--white)}
+.band--night .btn--ghost{border-color:var(--glass-line);color:var(--white);background:var(--glass)}
+.band--night .btn--ghost:hover{background:rgba(255,255,255,.14)}
+.btn--big{min-height:62px;padding:18px 32px;font-size:1.2rem}
+.btn--sm{min-height:42px;padding:9px 14px;font-size:.92rem;white-space:nowrap}
+.link{font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px;text-decoration-color:var(--wa)}
+.link:hover{text-decoration-color:currentColor}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(13,11,38,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--glass-line);color:var(--white)}
+.nav__in{display:flex;align-items:center;gap:12px;min-height:64px}
+.logo{display:inline-flex;align-items:center;gap:8px;font:800 1.3rem/1 var(--display);letter-spacing:-.03em;text-decoration:none;margin-right:auto;color:var(--white)}
+.logo__mark{width:30px;height:30px;border-radius:9px;background:var(--spectrum);display:grid;place-items:center}
+.logo__mark::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--night)}
+.nav__links{display:none}
+.nav__links a{text-decoration:none;font-weight:600;padding:10px 12px;border-radius:8px;color:var(--on-night)}
+.nav__links a:hover{color:var(--white);background:var(--glass)}
+.nav__menu{width:44px;height:44px;border:0;background:none;color:var(--white);display:grid;place-items:center;cursor:pointer;border-radius:10px}
+.nav__links.is-open{display:flex;flex-direction:column;position:absolute;left:0;right:0;top:100%;background:var(--night);padding:8px 20px 16px;border-bottom:1px solid var(--glass-line)}
+.nav__links.is-open a{padding:14px 4px;border-bottom:1px solid var(--glass-line);border-radius:0}
+
+@media (max-width:359px){.nav .btn--wa{display:none}} /* en pantallas muy angostas queda el botón fijo del pie */
+
+/* Hero */
+.hero{padding-block:40px 48px;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;
+  background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 60% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 80% 70% at 60% 40%,#000 20%,transparent 75%)}
+.hero::after{content:"";position:absolute;z-index:-1;inset:auto -20% -10% -20%;height:70%;
+  background:radial-gradient(40% 55% at 30% 60%,rgba(108,92,255,.55),transparent 70%),radial-gradient(38% 50% at 72% 55%,rgba(62,224,207,.35),transparent 70%);filter:blur(20px)}
+.hero__grid{display:grid;gap:40px}
+.hero h1 span{display:block}
+.hero__sub{font-size:1.25rem;margin-top:20px;max-width:27em;color:var(--on-night)}
+.hero__cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero__cta .btn{flex:1 1 220px}
+.hero__micro{margin-top:16px;display:flex;gap:8px;align-items:flex-start;font-weight:500}
+.hero__micro .ico{color:var(--wa);width:20px;height:20px;margin-top:2px}
+
+/* Tres teléfonos, tres diseños */
+.stage{min-width:0}
+.stack{position:relative;height:530px}
+.ph{position:absolute;left:50%;top:0;width:252px;margin-left:-126px;padding:8px;border-radius:42px;background:#07061A;border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 40px 70px -30px rgba(0,0,0,.9),0 0 0 6px rgba(255,255,255,.04);
+  transition:transform .7s cubic-bezier(.2,.8,.2,1),filter .7s;cursor:pointer}
+.ph[data-pos="0"]{transform:none;z-index:3;cursor:default}
+.ph[data-pos="1"]{transform:translate(54%,26px) scale(.82) rotate(7deg);z-index:2;filter:brightness(.6) saturate(.9)}
+.ph[data-pos="2"]{transform:translate(-54%,26px) scale(.82) rotate(-7deg);z-index:1;filter:brightness(.6) saturate(.9)}
+.scr{display:block;width:100%;height:498px;border-radius:34px;object-fit:cover;object-position:50% 0}
+.chip{position:absolute;z-index:4;display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:14px;background:rgba(22,19,58,.82);border:1px solid var(--glass-line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:.82rem;font-weight:600;color:var(--white);box-shadow:0 14px 30px -12px rgba(0,0,0,.7);animation:float 5s ease-in-out infinite}
+@media (max-width:639px){.chip{display:none}}
+.chip small{display:block;font-weight:400;color:var(--on-night)}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--wa);box-shadow:0 0 0 4px rgba(37,211,102,.25)}
+.chip--a{left:0;top:92px}
+.chip--b{right:0;bottom:70px;animation-delay:-2.5s}
+@keyframes float{50%{transform:translateY(-8px)}}
+.swap{margin-top:10px;text-align:center}
+.swap__label{font-size:.98rem;font-weight:600;color:var(--white)}
+.swap__tabs{display:inline-flex;gap:4px;margin-top:10px;padding:4px;background:var(--glass);border:1px solid var(--glass-line);border-radius:999px}
+.swap__tabs button{border:0;background:none;font:600 .92rem var(--body);color:var(--on-night);padding:9px 14px;border-radius:999px;cursor:pointer;min-height:40px}
+.swap__tabs button[aria-pressed="true"]{background:var(--white);color:var(--night)}
+
+/* Dolor */
+.pain{background:linear-gradient(var(--night),var(--night-2))}
+.pain__list{display:grid;gap:12px;margin-top:32px}
+.pain__list li{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--glass-line)}
+.pain__list .ico{color:var(--sun);margin-top:1px}
+.pain__punch{margin-top:36px;font:700 clamp(1.6rem,6vw,2.6rem)/1.15 var(--display);letter-spacing:-.02em}
+.pain__punch mark{background:var(--sun);color:var(--night);padding:.05em .25em;border-radius:8px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.pain__next{margin-top:28px;font-size:1.2rem;font-weight:600}
+
+/* Página web vs. web app */
+.duo{display:grid;gap:18px;margin-top:32px}
+.duo__col{border-radius:var(--r-lg);padding:26px 22px}
+.duo__col--no{background:#E8E7F3;color:#5A587A}
+.duo__col--yes{background:linear-gradient(var(--white),var(--white)) padding-box,var(--spectrum) border-box;border:2px solid transparent;box-shadow:0 30px 60px -30px rgba(108,92,255,.55)}
+.duo__kind{font-size:.95rem;font-weight:600;margin-top:4px;opacity:.85}
+.duo__col ul{margin-top:18px;display:grid;gap:12px}
+.duo__col li{display:flex;gap:10px;align-items:flex-start}
+.duo__col--yes .ico{color:var(--wa-dark)}
+.duo__col .ico--ok{color:#8885A6}
+
+/* Fotos de personas usando la app */
+.shot{margin:28px 0 0;position:relative;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--lift);aspect-ratio:16/10;background:var(--line)}
+.band--night .shot{box-shadow:0 30px 60px -30px rgba(0,0,0,.9);border:1px solid var(--glass-line)}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot figcaption{position:absolute;left:10px;right:10px;bottom:10px;padding:10px 14px;border-radius:14px;background:rgba(13,11,38,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--white);font-size:.9rem;font-weight:600;line-height:1.3}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+.shots .shot{margin:0;aspect-ratio:1}
+.shots .shot img{object-position:44% 50%}
+.shots figcaption{font-size:.78rem;padding:7px 10px;left:6px;right:6px;bottom:6px}
+@media (min-width:640px){
+  .shot figcaption{right:auto;left:16px;bottom:16px;font-size:1rem}
+  .shots{gap:18px}
+  .shots .shot{aspect-ratio:16/10}
+  .shots figcaption{font-size:.95rem}
+}
+@media (min-width:960px){
+  .shot--wide{aspect-ratio:21/9}
+}
+
+/* Autonomía y blindaje */
+.split{display:grid;gap:18px;margin-top:32px}
+.split__col{border-radius:var(--r-lg);padding:26px 22px;display:flex;flex-direction:column}
+.split__col--you{background:linear-gradient(var(--white),var(--white)) padding-box,var(--spectrum) border-box;border:2px solid transparent;box-shadow:var(--lift)}
+.split__col--us{background:var(--night);color:var(--white);box-shadow:0 30px 60px -30px rgba(13,11,38,.8)}
+.split__badge{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font-size:.88rem;font-weight:700;background:rgba(108,92,255,.12);color:var(--violet)}
+.split__col--us .split__badge{background:rgba(62,224,207,.14);color:var(--cyan)}
+.split__badge .ico{width:18px;height:18px}
+.split__col h3{font-size:1.45rem;margin-top:14px}
+.split__intro{margin-top:8px;color:var(--ink-soft)}
+.split__col--us .split__intro{color:var(--on-night)}
+.split__col ul{margin-top:18px;display:grid;gap:14px;flex:1}
+.split__col li{display:flex;gap:10px;align-items:flex-start;color:var(--ink-soft)}
+.split__col li b{display:block;color:var(--ink)}
+.split__col--us li{color:var(--on-night)}
+.split__col--us li b{color:var(--white)}
+.split__col--you li .ico{color:var(--wa-dark)}
+.split__col--us li .ico{color:var(--cyan)}
+.split__end{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font:700 1.1rem/1.25 var(--display)}
+.split__col--us .split__end{border-color:var(--glass-line)}
+@media (min-width:860px){.split{grid-template-columns:1fr 1fr}.split__col{padding:36px 32px}}
+
+/* Comparativo con agendas genéricas */
+.cmp{margin-top:32px;border-radius:var(--r-lg);overflow:hidden;background:var(--glass);border:1px solid var(--glass-line)}
+.cmp__row{display:grid;grid-template-columns:1fr 1fr}
+.cmp__row + .cmp__row{border-top:1px solid var(--glass-line)}
+.cmp__k{grid-column:1/-1;padding:14px 16px 0;font-weight:700;font-size:.92rem;color:var(--on-night)}
+.cmp__c{padding:8px 16px 16px;display:flex;gap:8px;align-items:flex-start;font-size:.98rem}
+.cmp__c .ico{width:20px;height:20px;margin-top:2px}
+.cmp__c--no{color:var(--on-night)}
+.cmp__c--no .ico{color:#FF7A8A}
+.cmp__c--yes{background:rgba(108,92,255,.2);font-weight:600}
+.cmp__c--yes .ico{color:var(--wa)}
+.cmp__head .cmp__c{padding:16px;font:700 1.05rem/1.15 var(--display)}
+.cmp__head .cmp__k{display:none}
+.cmp__head .cmp__c--yes{background:var(--spectrum);color:var(--night)}
+
+/* Demos: cada tarjeta con el diseño de su marca */
+.demos{display:grid;gap:18px;margin-top:32px}
+.demo{background:var(--white);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--lift);transition:transform .2s ease}
+.demo:hover{transform:translateY(-4px)}
+.demo__look{height:230px;overflow:hidden;background:var(--line);border-bottom:1px solid var(--line)}
+.demo__look img{width:100%;height:100%;object-fit:cover;display:block}
+.demo__brand{font-size:.9rem;font-weight:700;color:var(--violet)}
+.demo__body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.demo__body p{color:var(--ink-soft);flex:1}
+.demo__body .btn{margin-top:10px}
+.demo--off{background:transparent;box-shadow:none;border:2px dashed #C9C7E2;color:#8A88A3;justify-content:center}
+.demo--off:hover{transform:none}
+.demo--off .demo__body p{color:#8A88A3;flex:none}
+.tag{align-self:flex-start;font-size:.8rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--line);color:var(--ink-soft)}
+.demo__notify{color:var(--ink);font-size:.95rem;margin-top:8px}
+.demos__other{margin-top:28px}
+
+/* Mensajes */
+.flow{display:grid;gap:32px;margin-top:32px;align-items:start}
+.chat{max-width:400px;width:100%;justify-self:center;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 40px 70px -34px rgba(23,19,63,.6);border:1px solid var(--line)}
+.chat__head{background:#0B5A4A;color:#fff;display:flex;align-items:center;gap:10px;padding:12px 14px}
+.chat__avatar{width:38px;height:38px;border-radius:50%;background:#fff;color:#0B5A4A;display:grid;place-items:center;font:800 .95rem var(--display)}
+.chat__head b{display:block;line-height:1.1}
+.chat__head small{opacity:.8}
+.chat__body{background:#EDE6DC;padding:18px 12px 20px;display:grid;gap:14px;font-size:.92rem;line-height:1.4;color:#16201b}
+.bubble{position:relative;max-width:88%;padding:10px 12px 8px;border-radius:14px;background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.12)}
+.bubble--out{justify-self:end;background:#D9FDD3}
+.bubble dl{margin-top:8px;display:grid;grid-template-columns:auto 1fr;gap:2px 8px}
+.bubble dt{color:#5b6660}
+.bubble dd{font-weight:600}
+.bubble p + p{margin-top:8px}
+.bubble time{display:block;text-align:right;font-size:.72rem;color:#6d7872;margin-top:4px}
+.bubble u{color:#0B6BCB}
+.num{width:30px;height:30px;border-radius:50%;background:var(--violet);color:var(--white);display:grid;place-items:center;font:700 .95rem var(--display);flex:none}
+.bubble .num{position:absolute;top:-10px;left:-8px;border:2px solid #EDE6DC}
+.bubble--out .num{left:auto;right:-8px}
+.notes{display:grid;gap:18px}
+.notes li{display:flex;gap:14px;align-items:flex-start;font-size:1.1rem}
+.flow__foot{margin-top:22px;padding:16px 18px;border-radius:var(--r-md);background:var(--white);box-shadow:var(--lift);display:flex;gap:12px}
+.flow__foot .ico{color:var(--violet)}
+.flow__cta{margin-top:24px}
+
+/* Pasos */
+.steps{display:grid;gap:16px;margin-top:32px;counter-reset:s}
+.steps li{counter-increment:s;background:var(--white);border-radius:var(--r-lg);padding:24px 22px;box-shadow:var(--lift)}
+.steps li::before{content:counter(s);display:block;font:800 3.4rem/1 var(--display);margin-bottom:12px;background:var(--spectrum);-webkit-background-clip:text;background-clip:text;color:transparent}
+.steps p{margin-top:6px;color:var(--ink-soft)}
+.steps + .micro{margin-top:20px}
+
+/* Incluye */
+.feats{display:grid;gap:12px;margin-top:28px}
+.feats li{display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:var(--r-md);background:var(--paper);font-weight:500}
+.feats__i{width:42px;height:42px;border-radius:12px;background:var(--night);color:var(--cyan);display:grid;place-items:center;flex:none}
+
+/* Precio */
+.pricing{overflow:hidden;isolation:isolate}
+.pricing::after{content:"";position:absolute;z-index:-1;left:10%;right:10%;top:30%;height:60%;background:radial-gradient(50% 50% at 50% 50%,rgba(108,92,255,.5),transparent 70%);filter:blur(30px)}
+.price{margin-top:32px;border-radius:var(--r-lg);overflow:hidden;display:grid;background:linear-gradient(var(--night-2),var(--night-2)) padding-box,var(--spectrum) border-box;border:2px solid transparent;box-shadow:0 40px 80px -40px rgba(0,0,0,.9)}
+.price__main{padding:28px 22px}
+.price__ref{color:var(--on-night)}
+.price__ref s{text-decoration-thickness:2px;text-decoration-color:var(--sun)}
+.price__now{font:800 clamp(3.2rem,15vw,5.4rem)/.95 var(--display);letter-spacing:-.04em;margin-top:14px}
+.price__now small{display:block;font:600 1.1rem/1.3 var(--body);letter-spacing:0;margin-top:10px}
+.price__renew{margin-top:14px;color:var(--on-night)}
+.price__main .btn{margin-top:26px;width:100%}
+.price__calm{margin-top:16px;display:flex;gap:8px;font-weight:500;font-size:.98rem}
+.price__calm .ico{color:var(--wa);width:20px;height:20px;margin-top:2px}
+.price__inc{padding:26px 22px;background:var(--white);color:var(--ink)}
+.price__inc ul{margin-top:14px;display:grid;gap:11px}
+.price__inc li{display:flex;gap:10px;align-items:flex-start}
+.price__inc .ico{color:var(--wa-dark);width:22px;height:22px;margin-top:1px}
+.price__alt{margin-top:22px}
+
+/* Extras */
+.extras{display:grid;gap:12px;margin-top:28px}
+.extras li{background:var(--white);box-shadow:var(--lift);border-radius:var(--r-md);padding:18px;display:flex;gap:12px;align-items:center;font-weight:600}
+.extras small{display:block;font-weight:400;color:var(--ink-soft);font-size:.9rem}
+.extras .ico{color:var(--violet)}
+.extras + .micro{margin-top:20px;font-size:1rem}
+
+/* FAQ */
+.faq{margin-top:28px;border-top:1px solid var(--line);max-width:760px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:20px 0;font:700 1.15rem/1.25 var(--display)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";flex:none;width:12px;height:12px;border-right:2.5px solid var(--violet);border-bottom:2.5px solid var(--violet);transform:rotate(45deg);transition:transform .2s;margin-right:6px}
+.faq details[open] summary::after{transform:rotate(-135deg)}
+.faq details p{padding:0 0 20px;color:var(--ink-soft);max-width:38em}
+
+/* Cierre */
+.close{text-align:center;overflow:hidden;isolation:isolate}
+.close::after{content:"";position:absolute;z-index:-1;inset:auto 0 -40% 0;height:90%;background:radial-gradient(45% 60% at 50% 60%,rgba(108,92,255,.6),transparent 70%);filter:blur(20px)}
+.close .lead{margin-inline:auto}
+.close .btn{margin-top:30px}
+.close .micro{margin-top:16px}
+
+/* Footer */
+.foot{background:var(--night);color:var(--on-night);border-top:1px solid var(--glass-line);padding-block:36px;font-size:.95rem}
+.foot__in{display:grid;gap:22px}
+.foot nav{display:flex;flex-wrap:wrap;gap:6px 22px}
+.foot nav a{text-decoration:none;padding:6px 0}
+.foot nav a:hover{color:var(--white);text-decoration:underline}
+
+/* CTA fijo en móvil */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(13,11,38,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--glass-line)}
+.sticky .btn{width:100%}
+
+@media (min-width:640px){
+  .demos{grid-template-columns:1fr 1fr}
+  .feats{grid-template-columns:1fr 1fr}
+  .extras{grid-template-columns:repeat(3,1fr)}
+  .extras li{flex-direction:column;align-items:flex-start}
+  .duo{grid-template-columns:1fr 1fr}
+  .pain__list{grid-template-columns:1fr 1fr}
+  .hero__cta .btn{flex:0 0 auto}
+  .cmp__row{grid-template-columns:.7fr 1fr 1fr}
+  .cmp__k{grid-column:auto;padding:16px;font-size:1rem}
+  .cmp__c{padding:16px}
+  .cmp__head .cmp__k{display:block}
+}
+@media (min-width:960px){
+  body{padding-bottom:0;font-size:1.125rem}
+  .sticky{display:none}
+  .band{padding-block:108px}
+  .band--flush{padding-top:0}
+  .nav__menu{display:none}
+  .nav__links{display:flex;gap:2px;margin-right:10px}
+  .hero{padding-block:72px 88px}
+  .hero__grid{grid-template-columns:1fr 1fr;align-items:center;gap:32px}
+  .demos{grid-template-columns:repeat(4,1fr)}
+  .flow{grid-template-columns:400px 1fr;gap:64px;align-items:center}
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .feats{grid-template-columns:repeat(3,1fr)}
+  .price{grid-template-columns:1.1fr .9fr}
+  .price__main,.price__inc{padding:44px 40px}
+  .price__main .btn{width:auto}
+  .foot__in{grid-template-columns:auto 1fr auto;align-items:center}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 1.8a8.2 8.2 0 1 1-4.2 15.2l-.3-.2-2.9.8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8Zm-3.4 4c-.2 0-.5 0-.7.3-.3.3-1 1-1 2.3s1 2.7 1.2 2.9c.1.2 2 3.2 5 4.4 2.4 1 2.9.8 3.4.7.5 0 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.2-.3-.2-.6-.4l-1.9-.9c-.3-.1-.5-.2-.7.1l-.9 1.1c-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5.3-.5v-.5l-.9-2.1c-.2-.5-.4-.5-.6-.5Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></symbol>
+  <symbol id="i-clash" viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></symbol>
+  <symbol id="i-ghost" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/><path d="M4 4l16 16"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5a5 5 0 0 1 4.5 5"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
+  <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-install" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3"/></symbol>
+  <symbol id="i-sheet" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 9v12"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L5 14h6l-1 8 8-12h-6z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap nav__in">
+    <a class="logo" href="#inicio" aria-label="LocalApp, inicio"><span class="logo__mark"></span>LocalApp</a>
+    <nav class="nav__links" id="menu" aria-label="Principal">
+      <a href="#demos">Demos</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#precio">Precio</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <a class="btn btn--wa btn--sm" data-wa="lead" href="#">Quiero mi web app</a>
+    <button class="nav__menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><svg class="ico"><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<main>
+
+<!-- 1. Hero -->
+<section class="band band--night hero" id="inicio">
+  <div class="wrap hero__grid">
+    <div>
+      <h1><span>Tu negocio,</span> <span>tu agenda,</span> <span class="grad">tu marca.</span></h1>
+      <p class="hero__sub">Una web app donde tus clientes agendan solos, con tu logo, tus colores y tus fotos. Lista en 72 horas.</p>
+      <div class="hero__cta">
+        <a class="btn btn--wa btn--big" data-wa="lead" href="#"><svg class="ico"><use href="#i-wa"/></svg>Quiero mi web app</a>
+        <a class="btn btn--ghost btn--big" href="#demos">Ver demos</a>
+      </div>
+      <p class="hero__micro micro"><svg class="ico"><use href="#i-check"/></svg>Sin comisión por cita. Tú cobras directamente a tus clientes.</p>
+    </div>
+
+    <div class="stage">
+      <div class="stack" id="stack" role="img" aria-label="Tres web apps reales hechas por LocalApp, cada una con su propio diseño: Reviva Spa, OdontoCare y Huella Feliz">
+        <div class="chip chip--a"><i></i><span>Nueva cita<small>Sáb 10:00 a. m.</small></span></div>
+        <div class="chip chip--b"><span>Agendó sola<small>a las 11:42 p. m.</small></span></div>
+
+        <div class="ph" data-brand="spa" data-pos="0"><img class="scr" src="img/demo-revivaspa.jpg" width="720" height="1331" alt="" fetchpriority="high"></div>
+        <div class="ph" data-brand="odo" data-pos="1"><img class="scr" src="img/demo-odontocare.jpg" width="720" height="1432" alt="" style="object-position:50% 100%"></div>
+        <div class="ph" data-brand="gro" data-pos="2"><img class="scr" src="img/demo-huellafeliz.jpg" width="720" height="1280" alt=""></div>
+      </div>
+      <div class="swap">
+        <div class="swap__label" id="swapLabel">Tres negocios, tres diseños. El tuyo será único.</div>
+        <div class="swap__tabs" role="group" aria-labelledby="swapLabel">
+          <button type="button" data-brand="spa" aria-pressed="true">Spa</button>
+          <button type="button" data-brand="odo" aria-pressed="false">Odontología</button>
+          <button type="button" data-brand="gro" aria-pressed="false">Grooming</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. El dolor -->
+<section class="band band--night pain">
+  <div class="wrap">
+    <h2>¿Todavía agendas por chat, llamadas y cuaderno?</h2>
+    <p class="lead">Así se pierden las citas, y con ellas tu plata.</p>
+    <ul class="pain__list">
+      <li><svg class="ico"><use href="#i-chat"/></svg>Citas que se pierden entre mensajes, audios y chats sin leer.</li>
+      <li><svg class="ico"><use href="#i-clash"/></svg>Dos clientes a la misma hora, porque alguien anotó mal.</li>
+      <li><svg class="ico"><use href="#i-ghost"/></svg>Clientes que no llegan, porque nadie les recordó.</li>
+      <li><svg class="ico"><use href="#i-phone"/></svg>Tú de recepcionista, respondiendo “¿tienes cupo mañana?” todo el día.</li>
+    </ul>
+    <p class="pain__punch"><mark>Cada cita perdida es plata que no vuelve.</mark></p>
+    <p class="pain__next">Hay una forma más simple. 👇</p>
+  </div>
+</section>
+
+<!-- 3a. Página web vs. web app -->
+<section class="band">
+  <div class="wrap">
+    <h2>Una página web informa. Tu web app agenda.</h2>
+    <p class="lead">Las dos muestran tu negocio. Solo una te llena la agenda mientras duermes.</p>
+    <figure class="shot shot--wide">
+      <img src="img/clienta-agendando.webp" width="1024" height="559" loading="lazy" alt="Una clienta sonríe en la sala de su casa mientras agenda una cita desde el celular">
+      <figcaption>Tu clienta agenda desde su casa, a la hora que quiera.</figcaption>
+    </figure>
+    <div class="duo">
+      <div class="duo__col duo__col--no">
+        <h3>Página web</h3>
+        <p class="duo__kind">Un folleto en internet</p>
+        <ul>
+          <li><svg class="ico ico--ok"><use href="#i-check"/></svg>Muestra tus servicios y tu ubicación</li>
+          <li><svg class="ico"><use href="#i-x"/></svg>Para agendar, el cliente igual te escribe</li>
+          <li><svg class="ico"><use href="#i-x"/></svg>No sabe qué horas tienes libres</li>
+          <li><svg class="ico"><use href="#i-x"/></svg>Tú sigues anotando a mano</li>
+        </ul>
+      </div>
+      <div class="duo__col duo__col--yes">
+        <h3>Web app de LocalApp</h3>
+        <p class="duo__kind">Tu recepción abierta 24/7</p>
+        <ul>
+          <li><svg class="ico"><use href="#i-check"/></svg>Muestra tu negocio, con tu marca</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>El cliente elige día y hora, y agenda solo</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Solo ve los cupos que de verdad están libres</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>La cita llega a tu panel y a tu WhatsApp</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Se instala en el celular como una app</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3b. Comparativo con agendas genéricas -->
+<section class="band band--night">
+  <div class="wrap">
+    <h2>Tu cliente no debería agendar en la app de otro.</h2>
+    <p class="lead">Las agendas genéricas te cobran cada mes por verte igual a todos.</p>
+    <div class="shots">
+      <figure class="shot">
+        <img src="img/duena-spa.webp" width="1024" height="559" loading="lazy" alt="La dueña de un spa señala la agenda de su negocio en el celular, en la recepción del local">
+        <figcaption>Un spa, con su marca.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="img/odontologo.webp" style="object-position:62% 50%" width="1024" height="559" loading="lazy" alt="Un odontólogo muestra en el celular la agenda de su consultorio">
+        <figcaption>Un consultorio, con la suya.</figcaption>
+      </figure>
+    </div>
+    <div class="cmp" role="table" aria-label="Agendas genéricas frente a LocalApp">
+      <div class="cmp__row cmp__head" role="row">
+        <div class="cmp__k" role="columnheader"></div>
+        <div class="cmp__c cmp__c--no" role="columnheader">Agendas genéricas</div>
+        <div class="cmp__c cmp__c--yes" role="columnheader">LocalApp</div>
+      </div>
+      <div class="cmp__row" role="row">
+        <div class="cmp__k" role="rowheader">Cobro</div>
+        <div class="cmp__c cmp__c--no" role="cell"><svg class="ico"><use href="#i-x"/></svg>Mensualidad, todos los meses</div>
+        <div class="cmp__c cmp__c--yes" role="cell"><svg class="ico"><use href="#i-check"/></svg>Un pago al año, sin mensualidades</div>
+      </div>
+      <div class="cmp__row" role="row">
+        <div class="cmp__k" role="rowheader">Diseño</div>
+        <div class="cmp__c cmp__c--no" role="cell"><svg class="ico"><use href="#i-x"/></svg>La misma plantilla para todos</div>
+        <div class="cmp__c cmp__c--yes" role="cell"><svg class="ico"><use href="#i-check"/></svg>Hecho a la medida de tu marca</div>
+      </div>
+      <div class="cmp__row" role="row">
+        <div class="cmp__k" role="rowheader">Identidad</div>
+        <div class="cmp__c cmp__c--no" role="cell"><svg class="ico"><use href="#i-x"/></svg>El logo y los colores de la plataforma</div>
+        <div class="cmp__c cmp__c--yes" role="cell"><svg class="ico"><use href="#i-check"/></svg>Tu logo, tus colores, tus fotos y tus textos</div>
+      </div>
+      <div class="cmp__row" role="row">
+        <div class="cmp__k" role="rowheader">Enlace</div>
+        <div class="cmp__c cmp__c--no" role="cell"><svg class="ico"><use href="#i-x"/></svg>plataforma.com/tu-negocio</div>
+        <div class="cmp__c cmp__c--yes" role="cell"><svg class="ico"><use href="#i-check"/></svg>Tu enlace y tu dominio</div>
+      </div>
+      <div class="cmp__row" role="row">
+        <div class="cmp__k" role="rowheader">Lo que siente tu cliente</div>
+        <div class="cmp__c cmp__c--no" role="cell"><svg class="ico"><use href="#i-x"/></svg>Una app que se parece a todas</div>
+        <div class="cmp__c cmp__c--yes" role="cell"><svg class="ico"><use href="#i-check"/></svg>Que está en tu negocio</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Demos -->
+<section class="band" id="demos">
+  <div class="wrap">
+    <h2>Míralo funcionando en tu tipo de negocio.</h2>
+    <p class="lead">Entra, agenda una cita de prueba y vive lo que vivirían tus clientes.</p>
+    <div class="demos">
+      <article class="demo">
+        <div class="demo__look"><img src="img/demo-revivaspa.jpg" width="720" height="1300" loading="lazy" alt="Pantalla de inicio de la web app de Reviva Spa" style="object-position:50% 0%"></div>
+        <div class="demo__body">
+          <span class="demo__brand">Reviva Spa</span>
+          <h3>Spa y estética</h3>
+          <p>Elegante y tranquilo, como tu espacio.</p>
+          <a class="btn btn--ghost" data-demo="spa" href="#" target="_blank" rel="noopener">Ver demo de Spa</a>
+        </div>
+      </article>
+      <article class="demo">
+        <div class="demo__look"><img src="img/demo-odontocare.jpg" width="720" height="1300" loading="lazy" alt="Pantalla de inicio de la web app de OdontoCare" style="object-position:50% 38%"></div>
+        <div class="demo__body">
+          <span class="demo__brand">OdontoCare</span>
+          <h3>Odontología y consultorios</h3>
+          <p>Limpio y confiable, con la agenda de cada profesional.</p>
+          <a class="btn btn--ghost" data-demo="odonto" href="#" target="_blank" rel="noopener">Ver demo de Odontología</a>
+        </div>
+      </article>
+      <article class="demo">
+        <div class="demo__look"><img src="img/demo-huellafeliz.jpg" width="720" height="1300" loading="lazy" alt="Pantalla de la web app de Huella Feliz" style="object-position:50% 0%"></div>
+        <div class="demo__body">
+          <span class="demo__brand">Huella Feliz</span>
+          <h3>Grooming y veterinaria</h3>
+          <p>Alegre y cercano, como tus peludos clientes.</p>
+          <a class="btn btn--ghost" data-demo="groom" href="#" target="_blank" rel="noopener">Ver demo de Grooming</a>
+        </div>
+      </article>
+      <article class="demo demo--off">
+        <div class="demo__body">
+          <span class="tag">Próximamente</span>
+          <h3>Restaurantes y comidas</h3>
+          <p>Menú y pedidos por WhatsApp.</p>
+          <a class="link demo__notify" data-wa="food" href="#">Avísame cuando esté lista</a>
+        </div>
+      </article>
+    </div>
+    <p class="demos__other">¿Otro tipo de negocio? <a class="link" data-wa="other" href="#">Cuéntanos por WhatsApp.</a></p>
+  </div>
+</section>
+
+<!-- 5. Mensajes -->
+<section class="band band--white">
+  <div class="wrap">
+    <h2>Así se ve una cita, de principio a fin.</h2>
+    <p class="lead">Tu cliente agenda en tu web app y todo llega a tu WhatsApp, con los datos ya escritos.</p>
+    <div class="flow">
+      <div class="chat" role="img" aria-label="Chat de WhatsApp con el mensaje de un cliente que agendó y la confirmación del negocio">
+        <div class="chat__head">
+          <div class="chat__avatar">TN</div>
+          <div><b>Tu Negocio</b><small>en línea</small></div>
+        </div>
+        <div class="chat__body">
+          <div class="bubble">
+            <span class="num">1</span>
+            <p>¡Hola! Acabo de agendar mi cita en su Web App 🙌</p>
+            <dl>
+              <dt>Servicio</dt><dd>Masaje relajante</dd>
+              <dt>Especialista</dt><dd>Laura</dd>
+              <dt>Horario</dt><dd>Sáb 10 oct, 10:00 a. m.</dd>
+              <dt>Valor</dt><dd>$120.000</dd>
+            </dl>
+            <time>9:41 a. m.</time>
+          </div>
+          <div class="bubble bubble--out">
+            <span class="num">2</span>
+            <p><b>¡Cita confirmada con éxito!</b> ✅</p>
+            <dl>
+              <dt>Servicio</dt><dd>Masaje relajante</dd>
+              <dt>Fecha</dt><dd>Sábado 10 de octubre</dd>
+              <dt>Hora</dt><dd>10:00 a. m.</dd>
+              <dt>Ubicación</dt><dd>Cra. 43A #10-25</dd>
+              <dt>Código</dt><dd>ALM-4821</dd>
+            </dl>
+            <p>Llega 10 minutos antes. Para cambiar o cancelar: <u>tunegocio.com/cita/ALM-4821</u></p>
+            <time>9:43 a. m. ✓✓</time>
+          </div>
+        </div>
+      </div>
+      <div>
+        <ol class="notes">
+          <li><span class="num">1</span><span>Tu cliente agenda y te llega todo en un mensaje claro. Sin preguntas ni idas y vueltas.</span></li>
+          <li><span class="num">2</span><span>Tú confirmas con un toque y él recibe su código y su enlace para cambiar o cancelar.</span></li>
+        </ol>
+        <p class="flow__foot"><svg class="ico"><use href="#i-bell"/></svg><span>Recordatorios incluidos: te dejamos la lista lista y los envías con un toque desde tu WhatsApp.</span></p>
+        <a class="btn btn--wa flow__cta" data-wa="lead" href="#"><svg class="ico"><use href="#i-wa"/></svg>Quiero mi web app</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Cómo funciona -->
+<section class="band" id="como-funciona">
+  <div class="wrap">
+    <h2>De tu marca a tu agenda en 3 pasos.</h2>
+    <ol class="steps">
+      <li><h3>Nos envías tu información</h3><p>Logo, servicios, precios, horarios y fotos.</p></li>
+      <li><h3>Armamos tu web app</h3><p>Con tu identidad, lista en 72 horas.</p></li>
+      <li><h3>Tus clientes agendan</h3><p>Tú ves las citas en tu panel y envías recordatorios con un toque.</p></li>
+    </ol>
+    <p class="micro">Las 72 horas corren desde que recibimos toda tu información.</p>
+  </div>
+</section>
+
+<!-- 7. Qué incluye -->
+<section class="band band--white">
+  <div class="wrap">
+    <h2>Todo lo que necesita tu negocio para recibir citas.</h2>
+    <figure class="shot shot--wide">
+      <img src="img/profesional-agenda.webp" width="1024" height="559" loading="lazy" alt="Una odontóloga revisa las citas de la semana en el computador de su consultorio">
+      <figcaption>Tus citas de la semana, a la vista.</figcaption>
+    </figure>
+    <ul class="feats">
+      <li><span class="feats__i"><svg class="ico"><use href="#i-clock"/></svg></span>Tus clientes agendan solos, 24/7, desde el celular</li>
+      <li><span class="feats__i"><svg class="ico"><use href="#i-team"/></svg></span>Tu equipo con horarios independientes</li>
+      <li><span class="feats__i"><svg class="ico"><use href="#i-list"/></svg></span>Tus servicios con precio y duración</li>
+      <li><span class="feats__i"><svg class="ico"><use href="#i-shield"/></svg></span>Sin citas cruzadas: el sistema no permite dos citas a la misma hora</li>
+      <li><span class="feats__i"><svg class="ico"><use href="#i-panel"/></svg></span>Panel para ver y gestionar tus citas</li>
+      <li><span class="feats__i"><svg class="ico"><use href="#i-bell"/></svg></span>Recordatorios listos para enviar con un toque</li>
+      <li><span class="feats__i"><svg class="ico"><use href="#i-swap"/></svg></span>Tu cliente cancela o reprograma desde su enlace</li>
+      <li><span class="feats__i"><svg class="ico"><use href="#i-cal"/></svg></span>La cita llega al calendario del cliente</li>
+      <li><span class="feats__i"><svg class="ico"><use href="#i-install"/></svg></span>Se instala en el celular como una app</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7b. Autonomía y blindaje -->
+<section class="band">
+  <div class="wrap">
+    <h2>Autonomía operativa para ti, blindaje técnico por LocalApp.</h2>
+    <p class="lead">Tú cambias lo que se mueve a diario en tu negocio. Nosotros cuidamos la parte técnica para que tu web app no se caiga ni se desconfigure.</p>
+    <div class="split">
+      <div class="split__col split__col--you">
+        <span class="split__badge"><svg class="ico"><use href="#i-clock"/></svg>Libertad absoluta 24/7</span>
+        <h3>Lo que tú sí modificas</h3>
+        <p class="split__intro">Desde tu panel de gestión, al instante, sin pedir permiso ni esperar soporte.</p>
+        <ul>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Servicios y tratamientos</b>Crea, pausa, renombra o describe servicios cuando quieras.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Precios y promociones</b>Cambia tarifas en un clic; se actualizan al momento en tu web app.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Duración y tiempos</b>Define si un servicio dura 30, 45 o 60 minutos para cuadrar tu agenda.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Profesionales y equipo</b>Agrega colaboradores y activa o desactiva perfiles en rotaciones.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Horarios y disponibilidad</b>Aperturas, descansos, cierres de festivos y vacaciones.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Agenda y clientes</b>Confirma citas y consulta tu directorio de clientes habituales.</span></li>
+        </ul>
+        <p class="split__end">Autonomía total sobre tu negocio, sin depender de programadores.</p>
+      </div>
+      <div class="split__col split__col--us">
+        <span class="split__badge"><svg class="ico"><use href="#i-shield"/></svg>Garantía de estabilidad</span>
+        <h3>Lo que queda protegido por LocalApp</h3>
+        <p class="split__intro">Cuidamos la ingeniería de fondo para que tu web app no se caiga ni pierda velocidad.</p>
+        <ul>
+          <li><svg class="ico"><use href="#i-shield"/></svg><span><b>Estructura y diseño seguro</b>La experiencia de reserva se mantiene intuitiva y fluida.</span></li>
+          <li><svg class="ico"><use href="#i-bolt"/></svg><span><b>Servidor y hosting de alta velocidad</b>Carga en menos de un segundo en cualquier celular.</span></li>
+          <li><svg class="ico"><use href="#i-panel"/></svg><span><b>Seguridad y copias de respaldo</b>Tus datos protegidos y aislados, sin riesgo de pérdidas.</span></li>
+          <li><svg class="ico"><use href="#i-swap"/></svg><span><b>Actualizaciones continuas</b>Tu web app se mantiene moderna sin pagar desarrollos extra.</span></li>
+        </ul>
+        <p class="split__end">Cero dolores de cabeza técnicos: todo funciona 24/7.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Precio -->
+<section class="band band--night pricing" id="precio">
+  <div class="wrap">
+    <h2>Plan Pioneros.</h2>
+    <p class="lead">Una web app hecha a la medida de tu marca, a precio de lanzamiento.</p>
+    <div class="price">
+      <div class="price__main">
+        <p class="price__ref">Un desarrollo así a medida cuesta cerca de <s>$1.800.000 COP</s>.</p>
+        <p class="price__now">$630.000 <small>COP el primer año</small></p>
+        <p class="price__renew">Renovación: $180.000 COP al año desde el segundo año.</p>
+        <a class="btn btn--wa btn--big" data-wa="lead" href="#"><svg class="ico"><use href="#i-wa"/></svg>Quiero mi web app</a>
+        <p class="price__calm"><svg class="ico"><use href="#i-check"/></svg>Sin comisión por cita. Tú cobras directamente a tus clientes.</p>
+      </div>
+      <div class="price__inc">
+        <h3>Incluye</h3>
+        <ul>
+          <li><svg class="ico"><use href="#i-check"/></svg>Web app de 5 secciones: Inicio, Servicios, Agendar cita, Nosotros y Ubicación</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Hasta 10 servicios</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Hasta 6 profesionales con horarios independientes</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>1 sede</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>1 cuenta de administrador</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Mantenimiento del año</li>
+        </ul>
+        <p class="price__alt">¿Necesitas algo distinto? <a class="link" data-wa="custom" href="#">Hablemos de un desarrollo a medida.</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. Extras -->
+<section class="band">
+  <div class="wrap">
+    <h2>¿Quieres ir más lejos? Súmalo cuando lo necesites.</h2>
+    <ul class="extras">
+      <li><svg class="ico"><use href="#i-cal"/></svg>Conexión con Google Calendar</li>
+      <li><svg class="ico"><use href="#i-sheet"/></svg>Conexión con Google Sheets</li>
+      <li><svg class="ico"><use href="#i-bolt"/></svg><span>WhatsApp Business API<small>Mensajes totalmente automáticos</small></span></li>
+    </ul>
+    <p class="micro">Precio a convenir según tu negocio. Sin obligación.</p>
+  </div>
+</section>
+
+<!-- 10. Preguntas -->
+<section class="band band--white" id="preguntas">
+  <div class="wrap">
+    <h2>Todo lo que necesitas saber antes de empezar.</h2>
+    <p class="lead">Claridad total para que tomes la mejor decisión para tu negocio.</p>
+    <div class="faq">
+      <details><summary>¿Tengo que saber de programación, hosting o servidores?</summary><p>No. Nosotros armamos tu web app y cuidamos toda la parte técnica. Tú solo usas tu panel, que es tan fácil como usar WhatsApp.</p></details>
+      <details><summary>¿Por qué no cobran una mensualidad costosa como las plataformas tradicionales?</summary><p>Porque no alquilas una plataforma genérica. Armamos tu web app una vez: $630.000 el primer año y $180.000 al año desde el segundo.</p></details>
+      <details><summary>¿Mis clientes tienen que descargar una app pesada de la App Store o Google Play?</summary><p>No. Abren tu enlace y agendan desde el navegador. Si quieren, la dejan en la pantalla de inicio del celular con un toque.</p></details>
+      <details><summary>¿Puedo cambiar precios, servicios o profesionales cuando yo quiera?</summary><p>Sí. Desde tu panel cambias precios, servicios, profesionales y horarios al instante, sin pedirnos permiso.</p></details>
+      <details><summary>¿Puedo usar mi propio dominio (www.minegocio.com)?</summary><p>Sí, tu web app puede funcionar con tu propio dominio. Escríbenos y te contamos cómo conectarlo.</p></details>
+      <details><summary>¿Cuánto tiempo tarda la entrega de mi plataforma?</summary><p>72 horas desde que recibimos tu información completa: logo, servicios, precios, horarios y fotos.</p></details>
+      <details><summary>¿Cobran comisión por cita?</summary><p>No. Los pagos de tus clientes son directos contigo.</p></details>
+      <details><summary>¿Los recordatorios se envían solos?</summary><p>Te dejamos la lista lista y el mensaje ya escrito; los envías con un toque desde tu WhatsApp. El envío totalmente automático es un extra.</p></details>
+      <!-- PENDIENTE: publicar cuando se confirme la respuesta.
+      <details><summary>¿Necesito WhatsApp Business?</summary><p>[Confirmar si es requisito o recomendado.]</p></details>
+      <details><summary>¿Qué pasa si no renuevo?</summary><p>[Confirmar política.]</p></details>
+      -->
+    </div>
+  </div>
+</section>
+
+<!-- 11. Cierre -->
+<section class="band band--night close">
+  <div class="wrap">
+    <h2>Tus clientes ya quieren agendar. Dales dónde.</h2>
+    <p class="lead">Escríbenos y en una conversación te decimos qué necesita tu negocio.</p>
+    <a class="btn btn--wa btn--big" data-wa="lead" href="#"><svg class="ico"><use href="#i-wa"/></svg>Quiero mi web app</a>
+    <p class="micro">Respondemos por WhatsApp, sin compromiso.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <a class="logo" href="#inicio"><span class="logo__mark"></span>LocalApp</a>
+    <nav aria-label="Pie de página">
+      <a href="#demos">Demos</a>
+      <a href="#precio">Precio</a>
+      <a href="#preguntas">Preguntas</a>
+      <a data-wa="hello" href="#">WhatsApp</a>
+      <a data-config="privacyUrl" href="#">Política de tratamiento de datos</a>
+    </nav>
+    <span>© <span id="year">2026</span> LocalApp</span>
+  </div>
+</footer>
+
+<div class="sticky">
+  <a class="btn btn--wa" data-wa="lead" href="#"><svg class="ico"><use href="#i-wa"/></svg>Quiero mi web app</a>
+</div>
+
+<script>
+// ====== CONFIGURACIÓN: reemplazar antes de publicar ======
+const CONFIG = {
+  whatsapp: "573178009956", // número con indicativo de país, sin + ni espacios
+  demos: {
+    spa: "https://revivaspa.localapp.com.co/",
+    odonto: "https://odontocare.localapp.com.co/",
+    groom: "https://huellafeliz.localapp.com.co/"
+  },
+  privacyUrl: "politica-de-datos.html"
+};
+
+const WA_MESSAGES = {
+  lead: "Hola, vi LocalApp y quiero una web app para mi negocio de ___",
+  food: "Quiero que me avisen cuando lance el módulo de comidas",
+  other: "Hola, vi LocalApp. Mi negocio es de ___ y quiero saber si me sirve",
+  custom: "Hola, vi LocalApp y quiero hablar de un desarrollo a medida",
+  hello: "Hola, vi LocalApp y tengo una pregunta"
+};
+
+document.querySelectorAll("[data-wa]").forEach(a => {
+  a.href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(WA_MESSAGES[a.dataset.wa]);
+  a.target = "_blank";
+  a.rel = "noopener";
+});
+document.querySelectorAll("[data-demo]").forEach(a => { a.href = CONFIG.demos[a.dataset.demo]; });
+document.querySelectorAll("[data-config]").forEach(a => { a.href = CONFIG[a.dataset.config]; });
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// Menú móvil
+const menuBtn = document.querySelector(".nav__menu");
+const menu = document.getElementById("menu");
+const setMenu = open => { menu.classList.toggle("is-open", open); menuBtn.setAttribute("aria-expanded", open); };
+menuBtn.addEventListener("click", () => setMenu(!menu.classList.contains("is-open")));
+menu.addEventListener("click", e => { if (e.target.closest("a")) setMenu(false); });
+
+// Hero: tres teléfonos, cada uno con el diseño de su marca. El elegido pasa al frente.
+const phones = [...document.querySelectorAll(".ph")];
+const tabs = [...document.querySelectorAll(".swap__tabs button")];
+const order = phones.map(p => p.dataset.brand);
+function setFront(key) {
+  const front = order.indexOf(key);
+  phones.forEach((p, i) => { p.dataset.pos = (i - front + order.length) % order.length; });
+  tabs.forEach(t => t.setAttribute("aria-pressed", t.dataset.brand === key));
+}
+let current = 0, timer = null;
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  timer = setInterval(() => { current = (current + 1) % order.length; setFront(order[current]); }, 3400);
+}
+const pick = key => { clearInterval(timer); current = order.indexOf(key); setFront(key); };
+tabs.forEach(t => t.addEventListener("click", () => pick(t.dataset.brand)));
+phones.forEach(p => p.addEventListener("click", () => pick(p.dataset.brand)));
+</script>
+</body>
+</html>
